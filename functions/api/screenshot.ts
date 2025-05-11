@@ -49,7 +49,7 @@ const corsHeaders = {
   },
 };
 
-export async function onRequestPost(context: {
+export async function onRequest(context: {
   request: Request;
   env: Env;
 }): Promise<Response> {
@@ -57,7 +57,17 @@ export async function onRequestPost(context: {
     const { request, env } = context;
 
     if (request.method === "OPTIONS") {
-      return new Response("id", corsHeaders);
+      return new Response(null, corsHeaders);
+    }
+
+    if (request.method !== "GET") {
+      return new Response("Hello World!", {
+        status: 200,
+        headers: {
+          "Content-Type": "text/plain",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
     }
 
     // Parse the request body to get the HTML string
