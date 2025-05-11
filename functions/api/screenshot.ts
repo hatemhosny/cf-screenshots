@@ -43,15 +43,10 @@ interface ErrorResponse {
   error: string;
 }
 
-export const onRequestOptions: PagesFunction = async () => {
-  return new Response(null, {
-    status: 204,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "*",
-      "Access-Control-Allow-Methods": "*",
-    },
-  });
+const corsHeaders = {
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+  },
 };
 
 export async function onRequestPost(context: {
@@ -60,6 +55,10 @@ export async function onRequestPost(context: {
 }): Promise<Response> {
   try {
     const { request, env } = context;
+
+    if (request.method === "OPTIONS") {
+      return new Response("id", corsHeaders);
+    }
 
     // Parse the request body to get the HTML string
     const requestData: RequestData = await request.json();
@@ -131,6 +130,7 @@ export async function onRequestPost(context: {
     return new Response(JSON.stringify(response), {
       headers: {
         "Content-Type": "application/json",
+        ...corsHeaders.headers,
       },
     });
   } catch (error) {
@@ -147,6 +147,7 @@ export async function onRequestPost(context: {
       status: 500,
       headers: {
         "Content-Type": "application/json",
+        ...corsHeaders.headers,
       },
     });
   }
