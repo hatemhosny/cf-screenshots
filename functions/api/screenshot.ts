@@ -60,7 +60,7 @@ export async function onRequest(context: {
       return new Response(null, corsHeaders);
     }
 
-    if (request.method !== "GET") {
+    if (request.method === "GET") {
       return new Response("Hello World!", {
         status: 200,
         headers: {
