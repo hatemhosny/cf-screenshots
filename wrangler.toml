@@ -1,0 +1,4 @@
+[[r2_buckets]]
+binding = "SCREENSHOTS_BUCKET"
+bucket_name = "screenshots-bucket"
+preview_bucket_name = "screenshots-bucket-dev"
