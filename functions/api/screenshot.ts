@@ -54,28 +54,19 @@ export async function onRequest(context: {
   env: Env;
 }): Promise<Response> {
   try {
+    console.log("running");
     const { request, env } = context;
-
-    if (request.method === "OPTIONS") {
-      return new Response(null, corsHeaders);
-    }
-
-    if (request.method === "GET") {
-      return new Response("Hello World!", {
-        status: 200,
-        headers: {
-          "Content-Type": "text/plain",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-    }
 
     // Parse the request body to get the HTML string
     const requestData: RequestData = await request.json();
     const { html, filename, screenshotOptions } = requestData;
 
     if (!html) {
-      return new Response("Missing HTML content in request body", {
+      const errorResponse: ErrorResponse = {
+        success: false,
+        error: "Missing HTML content in request body",
+      };
+      return new Response(JSON.stringify(errorResponse), {
         status: 400,
         ...corsHeaders,
       });
@@ -110,7 +101,7 @@ export async function onRequest(context: {
 
     if (!screenshotResponse.ok) {
       const errorText: string = await screenshotResponse.text();
-      return new Response(`Failed to generate screenshot: ${errorText}`, {
+      return new Response(errorText, {
         status: screenshotResponse.status,
         ...corsHeaders,
       });
