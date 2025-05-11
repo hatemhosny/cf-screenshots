@@ -77,6 +77,7 @@ export async function onRequest(context: {
     if (!html) {
       return new Response("Missing HTML content in request body", {
         status: 400,
+        ...corsHeaders,
       });
     }
 
@@ -111,6 +112,7 @@ export async function onRequest(context: {
       const errorText: string = await screenshotResponse.text();
       return new Response(`Failed to generate screenshot: ${errorText}`, {
         status: screenshotResponse.status,
+        ...corsHeaders,
       });
     }
 
