@@ -43,6 +43,17 @@ interface ErrorResponse {
   error: string;
 }
 
+export const onRequestOptions: PagesFunction = async () => {
+  return new Response(null, {
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "*",
+      "Access-Control-Allow-Methods": "POST",
+    },
+  });
+};
+
 export async function onRequestPost(context: {
   request: Request;
   env: Env;
